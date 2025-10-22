@@ -44,7 +44,7 @@ class QLearningAgent:
 
         # With probability (1-epsilon): exploit (best known action)
         else:
-            return int(np.argmax(self.q_values[obs.tobytes]))
+            return int(np.argmax(self.q_values[obs]))
 
     def update(
             self,
@@ -58,11 +58,11 @@ class QLearningAgent:
             This is the heart of Q-learning: learn from (state, action, reward, next_state)
         """
         # Current estimate: Q(state, action)
-        current_q = self.q_values[obs.tobytes][action]
+        current_q = self.q_values[obs][action]
 
         # What's the best we could do from the next state?
         # (Zero if episode terminated - no future rewards possible)
-        future_q_value = (not terminated) * np.max(self.q_values[next_obs.tobytes()])
+        future_q_value = (not terminated) * np.max(self.q_values[next_obs])
 
         # What should the Q-value be? (Bellman equation)
         # What we actually experienced: reward + discounted future value
@@ -74,7 +74,7 @@ class QLearningAgent:
         # Update our estimate in the direction of the error
         # Learning rate controls how big steps we take
         # Update estimate: move toward the target
-        self.q_values[obs.tobytes][action] = (
+        self.q_values[obs][action] = (
                 current_q + self.learning_rate * error
         )
 

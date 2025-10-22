@@ -6,9 +6,13 @@ from tqdm import tqdm
 from LearningVisualisation import LearningVisualisation
 from QLearningAgent import QLearningAgent
 
+def convert_observation(observation: np.ndarray) -> tuple:
+    return tuple(map(tuple, observation))
+
 if __name__ == '__main__':
-    # True to train, False to test
-    training_mode = True
+
+    training_mode = True # True to train, False to test
+    show_gui = True
 
     # parameters for the agent
     learning_rate = 0.01  # How fast to learn (higher = faster but less stable)
@@ -18,7 +22,8 @@ if __name__ == '__main__':
     final_epsilon = 0.1  # Always keep some exploration
 
     # Create the environment
-    env = gym.make("ALE/Tetris-v5", render_mode="human", obs_type="grayscale")
+    render_mode = "human" if show_gui else "rgb_array"
+    env = gym.make("ALE/Tetris-v5", render_mode=render_mode, obs_type="grayscale")
     env = gym.wrappers.RecordEpisodeStatistics(env, buffer_length=n_episodes)
 
     env.metadata["render_fps"] = 30
@@ -72,14 +77,14 @@ if __name__ == '__main__':
         end_of_episode = False
         while not end_of_episode:
             # Agent chooses an action (initially random, gradually improves)
-            action = agent.get_action(obs)
+            action = agent.get_action(convert_observation(obs))
 
             # Take the action and observe the result
             next_obs, reward, terminated, truncated, info = env.step(action)
             episode_reward += reward
 
             # Learn from this experience
-            agent.update(obs, action, reward, terminated, next_obs)
+            agent.update(convert_observation(obs), action, reward, terminated, convert_observation(next_obs))
 
             # Move to next state
             end_of_episode = terminated or truncated
