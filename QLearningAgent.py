@@ -74,9 +74,7 @@ class QLearningAgent:
         # Update our estimate in the direction of the error
         # Learning rate controls how big steps we take
         # Update estimate: move toward the target
-        self.q_values[obs][action] = (
-                current_q + self.learning_rate * error
-        )
+        self.q_values[obs][action] = current_q + self.learning_rate * error
 
         # Track learning progress (useful for debugging)
         self.training_error.append(error)

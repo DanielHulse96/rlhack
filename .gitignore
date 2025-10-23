@@ -1,2 +1,5 @@
 .DS_Store
 .idea/*
+trained_agents/*
+tetris-agent-videos/*
+tetris-agent-graphs/*

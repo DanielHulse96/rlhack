@@ -16,7 +16,7 @@ class LearningVisualisation:
             mode=convolution_mode
         ) / window
 
-    def update(self, agent):
+    def update(self, agent, episode):
         fig, axs = plt.subplots(ncols=3, figsize=(12, 5))
 
         # Episode rewards (win/loss performance)
@@ -53,4 +53,4 @@ class LearningVisualisation:
         axs[2].set_xlabel("Step")
 
         plt.tight_layout()
-        plt.show()
+        plt.savefig(f"tetris-agent-graphs/episode{episode}.png")
